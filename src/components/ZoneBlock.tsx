@@ -13,12 +13,13 @@ export default function ZoneBlock({ x, y, w, h, label }: Props) {
         <div
         className="
             absolute flex items-center justify-center 
-            text-[11px] tracking-wide uppercase font-semibold
-            bg-white/10 border border-white/30 
-            text-white 
-            backdrop-blur-sm rounded-md 
-            shadow-[0_0_12px_rgba(255,255,255,0.25)]
             pointer-events-none select-none
+            uppercase font-semibold tracking-[0.18em]
+            text-[10px] md:text-[13px]
+            text-white/85 
+            bg-white/5 border border-white/25 
+            backdrop-blur-sm rounded-md
+            shadow-[0_0_10px_rgba(255,255,255,0.25)]
         "
         style={{
             left: `${x}%`,
@@ -26,6 +27,7 @@ export default function ZoneBlock({ x, y, w, h, label }: Props) {
             width: `${w}%`,
             height: `${h}%`,
             transform: "translate(-50%, -50%)",
+            fontFamily: "var(--font-orbitron)",
         }}
         >
         {label}

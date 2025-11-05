@@ -2,6 +2,13 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/Toast";
+import { Orbitron } from "next/font/google";
+
+const orbitron = Orbitron({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  variable: "--font-orbitron"
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,8 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+          className={`${geistSans.variable} ${geistMono.variable} ${orbitron.variable} bg-background text-foreground antialiased`}      >
         <ToastProvider>
           {children}
         </ToastProvider>

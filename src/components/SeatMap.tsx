@@ -7,13 +7,14 @@ import BookingModal from "./BookingModal";
 import { fetchSeats, bookSeat } from "@/lib/api";
 import ZoneBlock from "./ZoneBlock";
 import ZoneLabel from "./ZoneLabel";
+import Legend from "./legend";
 
 export default function SeatMap() {
   const [active, setActive] = useState<string | null>(null);
   const [status, setStatus] = useState<
     Record<string, "available" | "booked" | "paid">
   >({});
-
+  
   async function load() {
     const data = await fetchSeats();
     const newStatus: any = {};
@@ -37,6 +38,8 @@ export default function SeatMap() {
         style={{ width: "700px", height: "900px" }} // You can tweak later
       >
 
+        <Legend /> {/* ← sidebar added here */}
+
         {/* BACKGROUND (z-0) */}
         <img
           src="/seatmap.png"
@@ -51,14 +54,14 @@ export default function SeatMap() {
         <div className="absolute inset-0 z-20">
 
           {/* ===== ZONE LABELS ===== */}
-          <ZoneLabel label="ATTIC" x={88} y={25} />
-          <ZoneLabel label="VIP LEFT" x={24} y={28} />
-          <ZoneLabel label="VIP RIGHT" x={76} y={28} />
+          <ZoneLabel label="ATTIC" x={82} y={26} />
+          <ZoneLabel label="VIP LEFT" x={28} y={28} />
+          <ZoneLabel label="VIP RIGHT" x={72} y={28} />
 
           {/* STAGE / DJ / FLOOR / BAR */}
-          <ZoneBlock label="STAGE" x={50} y={18} w={40} h={6} />
-          <ZoneBlock label="DJ BOOTH" x={50} y={24} w={30} h={4} />
-          <ZoneBlock label="DANCE FLOOR" x={50} y={31} w={36} h={6} />
+          <ZoneBlock label="STAGE" x={50} y={18} w={65} h={13} />
+          <ZoneBlock label="DJ BOOTH" x={50} y={24} w={22} h={4} />
+          <ZoneBlock label="DANCE FLOOR" x={50} y={31} w={32} h={6} />
           <ZoneBlock label="BAR" x={50} y={86} w={18} h={6} />
 
           {/* SEATS */}
