@@ -29,8 +29,18 @@ export default function SeatMap() {
   }, []);
 
   return (
-    <div className="relative w-full max-w-[650px] aspect-[1142/1471] mx-auto mt-4 bg-black rounded-xl overflow-hidden">
-
+    <div className="
+    relative
+    w-full
+    max-w-[650px]
+    aspect-[1142/1471]
+    mx-auto mt-4
+    bg-black
+    rounded-xl
+    overflow-hidden
+    origin-top
+    scale-[0.78] sm:scale-[0.92] md:scale-100
+    ">
       {/* BACKGROUND IMAGE (z-0) */}
       <img
         src="/seatmap.png"
