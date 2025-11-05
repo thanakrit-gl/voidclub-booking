@@ -29,10 +29,7 @@ export default function SeatMap() {
   }, []);
 
   return (
-    // <div className="relative w-full max-w-[650px] aspect-[1142/1471] mx-auto mt-4 bg-black rounded-xl overflow-hidden">
-     <div className="w-full overflow-x-auto overflow-y-hidden">
-    <div className="relative mx-auto mt-4 bg-black rounded-xl"
-         style={{ width: "650px", height: "840px" }}></div>
+    <div className="relative w-full max-w-[650px] aspect-[1142/1471] mx-auto mt-4 bg-black rounded-xl overflow-hidden">
 
       {/* BACKGROUND IMAGE (z-0) */}
       <img
