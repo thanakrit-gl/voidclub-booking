@@ -34,7 +34,7 @@ export default function SeatMap() {
       {/* ✅ Wide canvas so seats don't cram on mobile */}
       <div
         className="relative mx-auto mt-4 bg-black rounded-xl"
-        style={{ width: "850px", height: "840px" }} // You can tweak later
+        style={{ width: "700px", height: "900px" }} // You can tweak later
       >
 
         {/* BACKGROUND (z-0) */}
