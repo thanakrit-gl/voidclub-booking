@@ -29,62 +29,70 @@ export default function SeatMap() {
   }, []);
 
   return (
-    <div className="relative w-full max-w-[650px] aspect-[1142/1471] mx-auto mt-4 bg-black rounded-xl overflow-hidden">
+    // ✅ Horizontal scroll container for mobile
+    <div className="w-full overflow-x-auto overflow-y-hidden px-2">
+      {/* ✅ Wide canvas so seats don't cram on mobile */}
+      <div
+        className="relative mx-auto mt-4 bg-black rounded-xl"
+        style={{ width: "1000px", height: "840px" }} // You can tweak later
+      >
 
-      {/* BACKGROUND IMAGE (z-0) */}
-      <img
-        src="/seatmap.png"
-        alt="Seat Map"
-        className="w-full h-full object-cover pointer-events-none select-none"
-      />
+        {/* BACKGROUND (z-0) */}
+        <img
+          src="/seatmap.png"
+          alt="Seat Map"
+          className="w-full h-full object-cover pointer-events-none select-none"
+        />
 
-      {/* 🌫 FOG BETWEEN BACKGROUND & SEATS (z-10) */}
-      <div className="fog-layer absolute inset-0 z-10 pointer-events-none" />
+        {/* 🌫 FOG (z-10) */}
+        <div className="fog-layer absolute inset-0 z-10 pointer-events-none" />
 
+        {/* EVERYTHING ABOVE FOG (z-20) */}
+        <div className="absolute inset-0 z-20">
 
-      {/* EVERYTHING ABOVE FOG (z-20) */}
-      <div className="absolute inset-0 z-20">
+          {/* ===== ZONE LABELS ===== */}
+          <ZoneLabel label="ATTIC" x={96} y={25} />
+          <ZoneLabel label="VIP LEFT" x={16} y={28} />
+          <ZoneLabel label="VIP RIGHT" x={82} y={28} />
 
-        {/* ===== ZONE LABELS ===== */}
-        <ZoneLabel label="ATTIC" x={96} y={25} />
-        <ZoneLabel label="VIP LEFT" x={16} y={28} />
-        <ZoneLabel label="VIP RIGHT" x={82} y={28} />
+          {/* STAGE / DJ / FLOOR / BAR */}
+          <ZoneBlock label="STAGE" x={50} y={18} w={40} h={6} />
+          <ZoneBlock label="DJ BOOTH" x={50} y={24} w={30} h={4} />
+          <ZoneBlock label="DANCE FLOOR" x={50} y={31} w={48} h={8} />
+          <ZoneBlock label="BAR" x={50} y={86} w={18} h={6} />
 
-        {/* STAGE / DJ / FLOOR / BAR */}
-        <ZoneBlock label="STAGE" x={50} y={18} w={40} h={6} />
-        <ZoneBlock label="DJ BOOTH" x={50} y={24} w={30} h={4} />
-        <ZoneBlock label="DANCE FLOOR" x={50} y={31} w={48} h={8} />
-        <ZoneBlock label="BAR" x={50} y={86} w={18} h={6} />
+          {/* SEATS */}
+          {Object.entries(seatPos).map(([id, { x, y }]) => (
+            <Seat
+              key={id}
+              id={id}
+              x={x}
+              y={y}
+              status={status[id]}
+              onClick={setActive}
+            />
+          ))}
 
-        {/* SEATS */}
-        {Object.entries(seatPos).map(([id, { x, y }]) => (
-          <Seat
-            key={id}
-            id={id}
-            x={x}
-            y={y}
-            status={status[id]}
-            onClick={setActive}
-          />
-        ))}
+        </div>
+
+        {/* ✅ BOOKING MODAL */}
+        <BookingModal
+          open={!!active}
+          tableId={active}
+          onClose={() => setActive(null)}
+          onConfirm={async (name) => {
+            if (!active) return;
+            try {
+              await bookSeat(active, name);
+              await load();
+              setActive(null);
+            } catch (err) {
+              console.error("❌ bookSeat error:", err);
+            }
+          }}
+        />
+
       </div>
-
-      {/* ✅ BOOKING MODAL */}
-      <BookingModal
-        open={!!active}
-        tableId={active}
-        onClose={() => setActive(null)}
-        onConfirm={async (name) => {
-          if (!active) return;
-          try {
-            await bookSeat(active, name);
-            await load();
-            setActive(null);
-          } catch (err) {
-            console.error("❌ bookSeat error:", err);
-          }
-        }}
-      />
     </div>
   );
 }
