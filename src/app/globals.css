@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: radial-gradient(
+      circle at 50% 20%,
+      rgba(15, 45, 30, 0.35),
+      rgba(5, 10, 8, 0.85)
+    ),
+    #060a08; /* deep forest night */
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* --- ADD BELOW THIS LINE (DON'T DELETE ANYTHING ABOVE) --- */
+
+/* Seat glow effects */
+.glow-green { box-shadow: 0 0 12px rgba(60, 207, 78, .5); }
+.glow-gold  { box-shadow: 0 0 12px rgba(255, 206, 0, .5); }
+
+/* Modal backdrop blur */
+.backdrop {
+  background: rgba(10, 12, 16, 0.55);
+  backdrop-filter: blur(8px);
+}
+
+@keyframes fadein {
+  from { opacity: 0; transform: translate(-50%, 10px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.animate-fadein {
+  animation: fadein 0.25s ease-out;
+}
+
+/* ====== FOREST FOG BACKGROUND ====== */
+.fog-layer {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background:
+    /* left side source */
+    radial-gradient(circle at 0% 50%, rgba(0, 255, 200, 0.12), transparent 30%),
+    /* mid soft haze */
+    radial-gradient(circle at 50% 60%, rgba(0, 255, 160, 0.08), transparent 55%),
+    /* right side faint tail */
+    radial-gradient(circle at 100% 40%, rgba(0, 255, 200, 0.10), transparent 20%);
+  animation: fog-move 18s ease-in-out infinite alternate;
+  filter: blur(34px);
+}
+
+@keyframes fog-move {
+  0%   { transform: translateX(-12%); opacity: 0.75; }
+  50%  { transform: translateX(12%);  opacity: 0.90; }
+  100% { transform: translateX(-12%); opacity: 0.70; }
+}
