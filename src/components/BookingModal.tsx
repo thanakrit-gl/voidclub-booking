@@ -1,7 +1,6 @@
 "use client";
 
 import { seatInfo } from "@/lib/seatInfo";
-import { getDeposit } from "@/lib/pricing";
 import { useState } from "react";
 
 export default function BookingModal({
@@ -20,25 +19,21 @@ export default function BookingModal({
 
   if (!open || !tableId) return null;
   const info = seatInfo[tableId];
-  const deposit = getDeposit(tableId);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* backdrop */}
       <div
         className="absolute inset-0 bg-black/70"
         onClick={() => !loading && onClose()}
       />
 
       <div className="relative backdrop p-5 rounded-xl w-full max-w-sm text-white">
-
         <h2 className="text-xl font-bold mb-2">{tableId}</h2>
         <p className="text-sm mb-1">{info.zone}</p>
 
-        <p className="text-sm text-emerald-300">
+        <p className="text-sm text-emerald-300 mb-4">
           Minimum Spend: {info.price.toLocaleString()} THB
-        </p>
-        <p className="text-xs text-pink-300 mb-4">
-          Deposit Required Now: {deposit.toLocaleString()} THB
         </p>
 
         <input
@@ -61,28 +56,25 @@ export default function BookingModal({
           <button
             type="button"
             onClick={async () => {
+              if (!name.trim()) return;
               setLoading(true);
-
-              // ✅ Mark seat booked first (stored in sheet / backend)
-              await onConfirm(name);
-
-              // ✅ Redirect to deposit payment page
-              window.location.href =
-                `https://api.elementpay.io/merchant/light/#!/?amount=${deposit}&key=92696a2d-5700-11f0-9d5e-0206e0436cc1&env=sandbox`;
-
-              setLoading(false);
+              try {
+                await onConfirm(name.trim());
+              } finally {
+                setLoading(false);
+                setName("");
+              }
             }}
             disabled={loading || name.trim() === ""}
             className="px-3 py-2 bg-emerald-600 rounded-md flex items-center gap-2 disabled:opacity-40"
           >
             {loading ? (
-              <span className="animate-spin border-2 border-white/40 border-t-white rounded-full w-4 h-4"></span>
+              <span className="animate-spin border-2 border-white/40 border-t-white rounded-full w-4 h-4" />
             ) : (
-              "Confirm & Pay Deposit"
+              "Confirm Booking"
             )}
           </button>
         </div>
-
       </div>
     </div>
   );
