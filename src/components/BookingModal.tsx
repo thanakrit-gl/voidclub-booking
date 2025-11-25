@@ -63,6 +63,8 @@ export default function BookingModal({
               } finally {
                 setLoading(false);
                 setName("");
+
+                onClose();        // ✅ FIX: close modal after booking
               }
             }}
             disabled={loading || name.trim() === ""}

@@ -2,7 +2,7 @@
 
 type Props = {
   id: string;
-  status: "available" | "booked" | "paid";
+  status: "available" | "booked" ;
   x: number;
   y: number;
   onClick: (id: string) => void;

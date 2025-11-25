@@ -3,41 +3,43 @@ export const DOGET_URL =
 
 export const DOPOST_URL = DOGET_URL;
 
-// 🗓️ 2) TEMP: hardcode event date for now (must match sheet "date" column)
-const EVENT_DATE = "2025-12-01"; // same format as your sheet first column
-
-// 3) Fetch seat statuses from Google Sheets FOR THAT DATE
-export async function fetchSeats() {
+// 1) Fetch seats for the selected date
+export async function fetchSeats(date: string) {
   const params = new URLSearchParams({
-    date: EVENT_DATE,
-    t: Date.now().toString(), // cache bust
-  });
+    date,
+    t: Date.now().toString(),
+  }); 
 
   const res = await fetch(`${DOGET_URL}?${params.toString()}`, {
     cache: "no-store",
   });
 
   if (!res.ok) throw new Error("Failed to fetch seats");
-  return res.json() as Promise<{
-    marked: { id: string; status: "booked" | "paid" }[];
-  }>;
+
+  const json = await res.json();
+
+  return {
+    marked: json.marked,
+    noData: json.marked.length === 0,  // <-- IMPORTANT
+  };
 }
 
-// 4) Book a seat for that same date
+// 2) Book seat for selected date
 export async function bookSeat(
   table_id: string,
-  book_under_name: string
+  book_under_name: string,
+  date: string
 ) {
   const payload = JSON.stringify({
     table_id,
     book_under_name,
-    date: EVENT_DATE,
+    date,
   });
 
   const res = await fetch(DOPOST_URL, {
     method: "POST",
     headers: {
-      "Content-Type": "text/plain;charset=utf-8", // avoid CORS preflight
+      "Content-Type": "text/plain;charset=utf-8",
     },
     body: payload,
     redirect: "follow",
@@ -46,7 +48,6 @@ export async function bookSeat(
   if (!res.ok) throw new Error("Booking failed");
   return res.text();
 }
-
 
 
 // Book a seat (LINE-style)
