@@ -123,12 +123,17 @@ export default function SeatMap({ date }: { date: string }) {
         tableId={active}
         date={date}
         onClose={() => setActive(null)}
-        onConfirm={async (name) => {
+        onConfirm={async (name, lineUserId) => {
           if (!active) return;
 
           try {
-            await bookSeat(active, name, date);  
-            await loadWithSpinner();             // refresh seats
+            console.log("LINE UID:", lineUserId);
+
+            // 🚀 send everything to Apps Script (we’ll update bookSeat next)
+            await bookSeat(active, name, date, lineUserId);
+
+            await loadWithSpinner();
+            setActive(null);
           } catch (err) {
             console.error("❌ booking error:", err);
           }

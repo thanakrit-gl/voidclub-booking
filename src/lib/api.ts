@@ -1,5 +1,5 @@
 export const DOGET_URL =
-  "https://script.google.com/macros/s/AKfycbyADvu608q70h3XrnisyvyJPTz0RezjxslEs2bVeuvRrmFpJCwI8TFuM8CjsAbAFeNxPA/exec";
+  "https://script.google.com/macros/s/AKfycbw2O9hPCFPfl_bKQ7TQI0SYpYr9sWtMadVOpY2o97SXzBMeKhwkpdsB3EUyrf1VZQPOZg/exec";
 
 export const DOPOST_URL = DOGET_URL;
 
@@ -28,13 +28,15 @@ export async function fetchSeats(date: string) {
 export async function bookSeat(
   table_id: string,
   book_under_name: string,
-  date: string
+  date: string,
+  lineUserId: string | null
 ) {
   const payload = JSON.stringify({
     table_id,
     book_under_name,
     date,
-  });
+    lineUserId,   // ⭐ ONLY NEW FIELD, NOTHING ELSE CHANGED
+  })
 
   const res = await fetch(DOPOST_URL, {
     method: "POST",
