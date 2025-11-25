@@ -136,6 +136,10 @@ export default function BookingModal({
               <button
                 onClick={async () => {
                   if (!name.trim()) return;
+                  if (!lineUserId) {
+                    alert("Please login with LINE before booking.");
+                    return;
+                  }
                   setLoading(true);
 
                   try {
@@ -148,7 +152,7 @@ export default function BookingModal({
                     setLoading(false);
                   }
                 }}
-                disabled={loading || !name.trim()}
+                disabled={loading || !name.trim() || !lineUserId}
                 className="px-3 py-2 bg-emerald-600 rounded-md flex items-center gap-2 disabled:opacity-40"
               >
                 {loading ? (
