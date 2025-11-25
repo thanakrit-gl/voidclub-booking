@@ -1,4 +1,5 @@
 "use client";
+export const ssr = false;
 
 import { useState } from "react";
 import SeatMap from "@/components/SeatMap";

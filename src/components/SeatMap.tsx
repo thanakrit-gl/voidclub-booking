@@ -15,48 +15,53 @@ export default function SeatMap({ date }: { date: string }) {
   const [noSchedule, setNoSchedule] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  async function load() {
-    setLoading(true);
+  // 🌟 SAME STATUS BUILDER
+  function buildStatus(marked: { id: string; status: "booked" }[]) {
+    const newStatus: Record<string, "available" | "booked"> = {};
+    Object.keys(seatPos).forEach((id) => (newStatus[id] = "available"));
+    marked.forEach(({ id, status }) => (newStatus[id] = status));
+    return newStatus;
+  }
 
+  // 🌟 LOAD WITH SPINNER → used ONLY for date change + confirm
+  async function loadWithSpinner() {
+    setLoading(true);
     try {
       const data = await fetchSeats(date);
-      const newStatus: Record<string, "available" | "booked"> = {};
-
-      // Default: all seats available
-      Object.keys(seatPos).forEach((id) => (newStatus[id] = "available"));
-
-      // Detect if this date has NO rows at all
-      if (!data.marked || data.marked.length === 0) {
-        setNoSchedule(true);
-      } else {
-        setNoSchedule(false);
-      }
-
-      // Fill booked seats
-      data.marked.forEach(({ id, status }: { id: string; status: "booked" }) => {
-        newStatus[id] = status;
-      });
-
-      setStatus(newStatus);
+      setNoSchedule(!data.marked || data.marked.length === 0);
+      setStatus(buildStatus(data.marked ?? []));
     } catch (err) {
-      console.error("failed loading seats:", err);
-      const fallback: Record<string, "available"> = {};
-      Object.keys(seatPos).forEach((id) => (fallback[id] = "available"));
-      setStatus(fallback);
+      console.error("❌ load error:", err);
     }
-
     setLoading(false);
   }
 
+  // 🌟 SILENT LOAD (NO SPINNER) → used for auto-refresh
+  async function silentLoad() {
+    try {
+      const data = await fetchSeats(date);
+      setNoSchedule(!data.marked || data.marked.length === 0);
+      setStatus(buildStatus(data.marked ?? []));
+    } catch (err) {
+      console.error("❌ silent load error:", err);
+    }
+  }
+
+  // 🌟 ON DATE CHANGE → use spinner ONCE
   useEffect(() => {
-    setNoSchedule(false);
-    setLoading(true);
-    load();                         // load once only
-    return () => {};                // no interval
+    setNoSchedule(false);  // 🔥 reset instantly when date changes?????
+    loadWithSpinner(); // show spinner only on date change
+
+    // AUTO-REFRESH every 3 seconds WITHOUT spinner
+    const interval = setInterval(() => {
+      silentLoad();
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, [date]);
 
-  // ❌ NO SCHEDULE FOR THIS DATE
-  if (noSchedule) {
+  // ❌ IF NO SCHEDULE
+  if (!loading && noSchedule) {
     return (
       <div className="w-full text-center text-red-400 py-10 text-xl font-semibold">
         ❌ No schedule exists for {date}
@@ -72,7 +77,7 @@ export default function SeatMap({ date }: { date: string }) {
       >
         <Legend />
 
-        {/* SPINNER OVERLAY */}
+        {/* SPINNER OVERLAY (only for date change & confirm) */}
         {loading && (
           <div className="absolute inset-0 z-[50] bg-black/60 backdrop-blur-sm flex items-center justify-center">
             <div className="w-10 h-10 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -86,23 +91,20 @@ export default function SeatMap({ date }: { date: string }) {
           className="w-full h-full object-cover pointer-events-none select-none"
         />
 
-        {/* FOG EFFECT */}
+        {/* FOG */}
         <div className="fog-layer absolute inset-0 z-10 pointer-events-none" />
 
-        {/* LABELS + SEATS */}
+        {/* SEATS + LABELS */}
         <div className="absolute inset-0 z-20">
-          {/* Zone Labels */}
           <ZoneLabel label="ATTIC" x={82} y={26} />
           <ZoneLabel label="VIP LEFT" x={28} y={28} />
           <ZoneLabel label="VIP RIGHT" x={72} y={28} />
 
-          {/* Blocks */}
           <ZoneBlock label="STAGE" x={50} y={18} w={65} h={13} />
           <ZoneBlock label="DJ BOOTH" x={50} y={24} w={22} h={4} />
           <ZoneBlock label="DANCE FLOOR" x={50} y={31} w={32} h={6} />
           <ZoneBlock label="BAR" x={50} y={86} w={18} h={6} />
 
-          {/* Seats */}
           {Object.entries(seatPos).map(([id, { x, y }]) => (
             <Seat
               key={id}
@@ -124,10 +126,10 @@ export default function SeatMap({ date }: { date: string }) {
             if (!active) return;
             try {
               await bookSeat(active, name, date);
-              await load();
+              await loadWithSpinner(); // spinner refresh after booking
               setActive(null);
             } catch (err) {
-              console.error("❌ bookSeat error:", err);
+              console.error("❌ booking error:", err);
             }
           }}
         />
