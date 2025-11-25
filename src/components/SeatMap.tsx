@@ -119,20 +119,21 @@ export default function SeatMap({ date }: { date: string }) {
 
         {/* BOOKING MODAL */}
         <BookingModal
-          open={!!active}
-          tableId={active}
-          onClose={() => setActive(null)}
-          onConfirm={async (name) => {
-            if (!active) return;
-            try {
-              await bookSeat(active, name, date);
-              await loadWithSpinner(); // spinner refresh after booking
-              setActive(null);
-            } catch (err) {
-              console.error("❌ booking error:", err);
-            }
-          }}
-        />
+        open={!!active}
+        tableId={active}
+        date={date}
+        onClose={() => setActive(null)}
+        onConfirm={async (name) => {
+          if (!active) return;
+
+          try {
+            await bookSeat(active, name, date);  
+            await loadWithSpinner();             // refresh seats
+          } catch (err) {
+            console.error("❌ booking error:", err);
+          }
+        }}
+      />
       </div>
     </div>
   );
