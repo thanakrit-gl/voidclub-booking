@@ -1,7 +1,6 @@
-export const DOGET_URL =
-  "https://script.google.com/macros/s/AKfycbyHkfH_SkPqGTyPgbXaTwqNjhpjYnPXSHu7XqmwjWI44Cgkrm1wy585IGJDCo2psoSTPA/exec";
-
+export const DOGET_URL = process.env.NEXT_PUBLIC_GAS_URL!;
 export const DOPOST_URL = DOGET_URL;
+
 
 // 1) Fetch seats for the selected date
 export async function fetchSeats(date: string) {
