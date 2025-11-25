@@ -20,6 +20,7 @@ export default function BookingModal({
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
 
   // ⭐ store LINE user id
   const [lineUserId, setLineUserId] = useState<string | null>(null);
@@ -32,6 +33,8 @@ export default function BookingModal({
   --------------------------------------------------------- */
   async function handleLineLogin() {
     try {
+      setLoginLoading(true);
+
       const liff = await initLiff();
 
       if (!liff.isLoggedIn()) {
@@ -47,6 +50,8 @@ export default function BookingModal({
     } catch (err) {
       console.error("LINE login failed:", err);
       alert("LINE login failed.");
+    } finally {
+      setLoginLoading(false);
     }
   }
 
@@ -110,10 +115,17 @@ export default function BookingModal({
 
             {/* ⭐ LOGIN WITH LINE BUTTON */}
             <button
-              className="mb-3 px-3 py-2 bg-green-600 rounded-md"
+              className="mb-3 px-3 py-2 bg-green-600 rounded-md flex items-center justify-center gap-2 disabled:opacity-50"
               onClick={handleLineLogin}
+              disabled={loginLoading}
             >
-              {lineUserId ? "LINE Connected ✓" : "Login with LINE"}
+              {loginLoading ? (
+                <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></span>
+              ) : lineUserId ? (
+                "LINE Connected ✓"
+              ) : (
+                "Login with LINE"
+              )}
             </button>
 
             <input
