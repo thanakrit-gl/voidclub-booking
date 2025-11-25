@@ -1,5 +1,5 @@
 export const DOGET_URL =
-  "https://script.google.com/macros/s/AKfycbw2O9hPCFPfl_bKQ7TQI0SYpYr9sWtMadVOpY2o97SXzBMeKhwkpdsB3EUyrf1VZQPOZg/exec";
+  "https://script.google.com/macros/s/AKfycbyHkfH_SkPqGTyPgbXaTwqNjhpjYnPXSHu7XqmwjWI44Cgkrm1wy585IGJDCo2psoSTPA/exec";
 
 export const DOPOST_URL = DOGET_URL;
 
