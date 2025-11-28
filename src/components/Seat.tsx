@@ -1,5 +1,5 @@
 "use client";
-
+// bla bal bal
 type Props = {
   id: string;
   status: "available" | "booked" ;
@@ -33,7 +33,7 @@ export default function Seat({ id, status, x, y, onClick }: Props) {
       ? status === "available"
         ? "border border-purple-400 text-purple-200 bg-purple-700/20 shadow-[0_0_14px_rgba(200,100,255,0.7)] hover:shadow-[0_0_20px_rgba(220,140,255,1)] hover:border-purple-200 hover:text-white cursor-pointer"
         : status === "booked"
-        ? "bg-purple-900/40 text-purple-700 border border-purple-900 cursor-not-allowed"
+        ? "bg-purple-500/15 text-purple-400 border border-purple-500/30 cursor-not-allowed brightness-[60%]"
         : "bg-purple-400 text-black border border-white shadow-[0_0_25px_rgba(200,100,255,1)] cursor-not-allowed"
       : "";
 
@@ -43,7 +43,7 @@ export default function Seat({ id, status, x, y, onClick }: Props) {
       ? status === "available"
         ? "border border-[#41f3ff] text-[#bffbff] bg-[#41f3ff]/10 shadow-[0_0_20px_rgba(65,243,255,0.85)] hover:shadow-[0_0_30px_rgba(120,255,255,1)] hover:border-white hover:text-white cursor-pointer"
         : status === "booked"
-        ? "bg-[#072a33]/60 text-[#4ac7d4] border border-[#0c3d47] cursor-not-allowed"
+        ? "bg-[#04161b]/70 text-[#3a9eaa] border border-[#092d33] cursor-not-allowed brightness-[70%]"
         : // PAID
           "bg-[#41f3ff] text-black border border-white shadow-[0_0_35px_rgba(65,243,255,1)] cursor-not-allowed"
       : "";
@@ -67,7 +67,7 @@ const vipAtticClass =
     ? status === "available"
       ? "border-[3px] border-[#40FF7A] text-[#B8FFC8] bg-[#40FF7A]/15 shadow-[0_0_26px_rgba(64,255,122,0.65)] hover:shadow-[0_0_42px_rgba(64,255,122,1)] hover:border-white hover:text-white cursor-pointer"
       : status === "booked"
-      ? "bg-[#102419]/60 text-[#3fa76a] border border-[#1e4d32] cursor-not-allowed"
+      ? "bg-[#0a1d14]/70 text-[#2b7d4f] border border-[#103524] cursor-not-allowed brightness-[70%]"
       : // PAID — solid mint flex mode
         "bg-[#40FF7A] text-black border-[3px] border-white shadow-[0_0_42px_rgba(64,255,122,1)] cursor-not-allowed"
     : "";
@@ -78,7 +78,7 @@ const vipAtticClass =
       ? status === "available"
         ? "border border-[#9ce7ff] text-[#d5f6ff] bg-[#5ad6ff]/15 shadow-[0_0_18px_rgba(150,235,255,0.8)] hover:shadow-[0_0_26px_rgba(180,250,255,1)] hover:border-white hover:text-white cursor-pointer"
         : status === "booked"
-        ? "bg-[#0c1a22]/60 text-[#6bb8cc] border border-[#1c3f47] cursor-not-allowed"
+        ? "bg-[#09131a]/70 text-[#4e9fb5] border border-[#122830] cursor-not-allowed brightness-[80%]"
         : // PAID
           "bg-[#9ce7ff] text-black border border-white shadow-[0_0_30px_rgba(150,235,255,1)] cursor-not-allowed"
       : "";
